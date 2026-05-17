@@ -5,7 +5,7 @@ from __future__ import annotations
 import logging
 from typing import Literal
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Response, status
 from pydantic import BaseModel, Field
 from redis.asyncio import Redis
 
@@ -67,7 +67,7 @@ async def create_key(
 
 
 @router.delete("/keys/{key}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_key(key: str, redis: Redis = Depends(get_redis_dep)) -> None:
+async def delete_key(key: str, redis: Redis = Depends(get_redis_dep)) -> Response:
     """Revoke an API key."""
     deleted = await revoke_api_key(redis, key)
     if not deleted:
@@ -75,6 +75,7 @@ async def delete_key(key: str, redis: Redis = Depends(get_redis_dep)) -> None:
             status_code=status.HTTP_404_NOT_FOUND, detail="Key not found"
         )
     logger.info("api_key_revoked", extra={"key_prefix": key[:8]})
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 @router.post("/model", response_model=ModelSwitchResponse)
