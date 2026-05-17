@@ -1,0 +1,17 @@
+global:
+  scrape_interval: 5s
+  evaluation_interval: 5s
+
+scrape_configs:
+  - job_name: wukong-serve
+    metrics_path: /metrics
+    static_configs:
+      # The app runs on the host. host.docker.internal resolves to the docker
+      # host on Mac, Windows, and (via extra_hosts in compose) Linux.
+      - targets: ["host.docker.internal:8000"]
+        labels:
+          service: wukong-serve
+
+  - job_name: prometheus
+    static_configs:
+      - targets: ["localhost:9090"]
