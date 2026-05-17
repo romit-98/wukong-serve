@@ -1,5 +1,7 @@
 # Wukong-serve
 
+![CI](https://github.com/romit-98/wukong-serve/actions/workflows/ci.yml/badge.svg)
+
 A production-realistic LLM inference serving system. Wukong sits between an
 Ollama model backend and the outside world and takes care of everything that
 isn't the model itself: authentication, rate limiting, session state,
