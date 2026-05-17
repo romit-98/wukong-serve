@@ -21,12 +21,14 @@ import pytest
 import pytest_asyncio
 from httpx import ASGITransport, AsyncClient
 
-# Configure env BEFORE importing the app so settings pick it up.
-os.environ.setdefault("ADMIN_SECRET", "test-admin-secret")
+# Configure env BEFORE importing the app so settings pick it up. We use direct
+# assignment (not setdefault) because CI sets some of these to different values
+# and the test suite has its own contract about what they should be.
+os.environ["ADMIN_SECRET"] = "test-admin-secret"
 os.environ.setdefault("REDIS_URL", "redis://localhost:6379")
-os.environ.setdefault("OLLAMA_DEFAULT_MODEL", "test-model")
-os.environ.setdefault("RATE_LIMIT_FREE_RPM", "3")
-os.environ.setdefault("RATE_LIMIT_PRO_RPM", "10")
+os.environ["OLLAMA_DEFAULT_MODEL"] = "test-model"
+os.environ["RATE_LIMIT_FREE_RPM"] = "3"
+os.environ["RATE_LIMIT_PRO_RPM"] = "10"
 
 from app.config import get_settings  # noqa: E402
 from app.deps import (  # noqa: E402
